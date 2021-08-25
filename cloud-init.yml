@@ -1,0 +1,15 @@
+#cloud-config
+packages:
+ - python3-pip
+ - git
+package_update: true
+#package_upgrade: true
+#package_reboot_if_required: true
+runcmd:
+ - pip install notebook
+ - pip install git+https://github.com/miidas/jupyter_http_over_ws
+ - su - ubuntu -c "jupyter serverextension enable --py jupyter_http_over_ws"
+ - su - ubuntu -c "jupyter notebook --generate-config"
+ - echo "c.NotebookApp.allow_origin='https://colab.research.google.com'" >> /home/ubuntu/.jupyter/jupyter_notebook_config.py
+ - echo "c.NotebookApp.disable_check_xsrf=True" >> /home/ubuntu/.jupyter/jupyter_notebook_config.py
+ - echo 'This instance was provisioned by tf-oci-jupyter-notebook.' >> /etc/motd
